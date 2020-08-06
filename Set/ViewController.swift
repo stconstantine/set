@@ -9,12 +9,23 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        cards.append(theCard)
+        print (type(of: cards))
+        
     }
-
-
+    
+    var cards = [Card]()
+    
+    let theCard = Card (
+        number: .one,
+        thing: Card.Thing (
+            shape: .diamond,
+            shading: .solid,
+            color: .two
+        ))
+    
 }
 
