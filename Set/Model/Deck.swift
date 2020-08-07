@@ -10,7 +10,11 @@ import Foundation
 
 struct Deck {
     
-    var cards = [Card]()
+    private var cards = [Card]()
+    
+    var count: Int {
+        return cards.count
+    }
     
     mutating func draw() -> Card? {
         if cards.count > 0 {
@@ -21,7 +25,20 @@ struct Deck {
     }
     
     init() {
-        
+        for number in Card.Numbers.allCases {
+            for shape in Card.Thing.Shapes.allCases {
+                for shading in Card.Thing.Shadings.allCases {
+                    for color in Card.Thing.Colors.allCases {
+                        cards += [
+                            Card(thing: Card.Thing(
+                                shape: shape,
+                                shading: shading,
+                                color: color), number: number
+                            )]
+                    }
+                }
+            }
+        }
     }
 }
 
