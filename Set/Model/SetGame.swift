@@ -16,14 +16,14 @@ struct SetGame {
         var distinctNumbers = Set<Card.Numbers>()
         for theCard in cards {distinctNumbers.insert(theCard.number)}
         
-        var distinctShapes = Set<Card.Thing.Shapes>()
-        for theCard in cards {distinctShapes.insert(theCard.thing.shape)}
+        var distinctShapes = Set<Card.Shapes>()
+        for theCard in cards {distinctShapes.insert(theCard.shape)}
         
-        var distinctShadings = Set<Card.Thing.Shadings>()
-        for theCard in cards {distinctShadings.insert(theCard.thing.shading)}
+        var distinctShadings = Set<Card.Shadings>()
+        for theCard in cards {distinctShadings.insert(theCard.shading)}
         
-        var distinctColors = Set<Card.Thing.Colors>()
-        for theCard in cards {distinctColors.insert(theCard.thing.color)}
+        var distinctColors = Set<Card.Colors>()
+        for theCard in cards {distinctColors.insert(theCard.color)}
 
         return ![distinctNumbers.count,
                 distinctShapes.count,
@@ -33,38 +33,38 @@ struct SetGame {
     
     static var testCardsSet: [Card] {
         return [
-            Card(thing: Card.Thing(
+            Card(
                 shape: .diamond,
                 shading: .clear,
-                color: .one),
-                 number: .one),
-            Card(thing: Card.Thing(
+                color: .one,
+                number: .one),
+            Card(
                 shape: .oval,
                 shading: .clear,
-                color: .one),
-                 number: .one),
-            Card(thing: Card.Thing(
+                color: .one,
+                number: .one),
+            Card(
                 shape: .wave,
                 shading: .clear,
-                color: .one),
-                 number: .one)]
+                color: .one,
+                number: .one)]
     }
     static var testCardsNotSet: [Card] {
         return [
-            Card(thing: Card.Thing(
+            Card(
                 shape: .diamond,
                 shading: .clear,
-                color: .one),
-                 number: .one),
-            Card(thing: Card.Thing(
+                color: .one,
+                number: .one),
+            Card(
                 shape: .diamond,
                 shading: .solid,
-                color: .one),
-                 number: .one),
-            Card(thing: Card.Thing(
+                color: .one,
+                number: .one),
+            Card(
                 shape: .wave,
                 shading: .clear,
-                color: .one),
-                 number: .one)]
+                color: .one,
+                number: .one)]
     }
 }

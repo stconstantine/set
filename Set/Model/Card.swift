@@ -9,17 +9,16 @@
 import Foundation
 
 struct Card {
-    struct Thing {
-        enum Shapes: CaseIterable {case diamond, wave, oval}
-        enum Shadings: CaseIterable {case clear, stripped, solid}
-        enum Colors: CaseIterable {case one, two, three}
-        var shape: Shapes
-        var shading: Shadings
-        var color: Colors
-    }
     enum Numbers: CaseIterable {case one, two, three}
-    var thing: Thing
+    enum Shapes: CaseIterable {case diamond, wave, oval}
+    enum Shadings: CaseIterable {case clear, stripped, solid}
+    enum Colors: CaseIterable {case one, two, three}
+    
+    var shape: Shapes
+    var shading: Shadings
+    var color: Colors
+    var number: Numbers
+    
     var isSelected: Bool = false
     var isMatched: Bool = false
-    var number: Numbers
 }

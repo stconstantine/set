@@ -26,14 +26,14 @@ struct Deck {
     
     init() {
         for number in Card.Numbers.allCases {
-            for shape in Card.Thing.Shapes.allCases {
-                for shading in Card.Thing.Shadings.allCases {
-                    for color in Card.Thing.Colors.allCases {
+            for shape in Card.Shapes.allCases {
+                for shading in Card.Shadings.allCases {
+                    for color in Card.Colors.allCases {
                         cards += [
-                            Card(thing: Card.Thing(
-                                shape: shape,
-                                shading: shading,
-                                color: color), number: number
+                            Card(shape: shape,
+                                 shading: shading,
+                                 color: color,
+                                 number: number
                             )]
                     }
                 }
