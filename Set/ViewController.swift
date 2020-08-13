@@ -40,6 +40,7 @@ class ViewController: UIViewController {
 }
 
 extension Card {
+    //MARK: Here to add or change exact view attributes for model attributes
     
     var shapeView: String {
         switch self.shape {
@@ -48,19 +49,28 @@ extension Card {
         case .oval: return "●"
         }
     }
-    var colorAttribute: Dictionary<NSAttributedString.Key,Any> {
+    var colorAttribute: [NSAttributedString.Key:Any] {
         switch self.color {
         case .one: return [.foregroundColor: UIColor.systemRed]
         case .two: return [.foregroundColor: UIColor.systemBlue]
         case .three: return [.foregroundColor: UIColor.systemGreen]
         }
     }
-//    var shadingAttribute: Dictionary<NSAttributedString, Any> {
-//        switch self.shading {
-//        case .clear:
-//        case .solid:
-//        case .stripped: break
-//        }
-//    }
-    
+    var shadingAttribute: [NSAttributedString.Key:Any] {
+        switch self.shading {
+        case .clear: return [.backgroundColor: UIColor.clear]
+        case .solid: return [.backgroundColor: UIColor.systemYellow]
+        case .stripped: return [.backgroundColor: UIColor.black]
+        }
+    }
+    var attributesForString: [AnyHashable:Any] {
+    return [colorAttribute,shadingAttribute].merged(mergeRule: {_,new in new})
+    }
+}
+
+extension Array where Element == [AnyHashable:Any] {
+    // func to merge array of dictionaries by some merging rule, passed as a closure. Used to merge several dictionaries with NSAttributedString attributes.
+    func merged(mergeRule: (Any, Any) -> Any) -> [AnyHashable:Any] {
+        return reduce([:],{partiallyMergedDict, dictToMerge in partiallyMergedDict.merging(dictToMerge, uniquingKeysWith: mergeRule)})
+    }
 }
