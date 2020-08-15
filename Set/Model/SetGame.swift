@@ -10,6 +10,7 @@ import Foundation
 
 struct SetGame {
     private(set) var deck = Deck()
+    var cardsDrawn: [Card]?
     
     func setMade(with cards:[Card]) -> Bool {
         

@@ -12,8 +12,11 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        prepareForStart()
+        
     }
-    let deck = Deck()
+    var deck = Deck()
+    let game = SetGame()
     
     //to fil NSAttributedString.Key.backgroundColor
     let cardShadingAttribute = [Card.Shadings.solid:UIColor.systemYellow,
@@ -21,14 +24,15 @@ class ViewController: UIViewController {
                                 Card.Shadings.clear:UIColor.clear
     ]
     
-    
     func prepareForStart() {
         if cardButtons.count>=12 {
             for cardIndex in 0...12 {
                 cardButtons[cardIndex].isHidden = false
                 cardButtons[cardIndex].isEnabled = true
+                showCard(deck.draw()!, on: cardButtons[cardIndex])
             }
         }
+
     }
     
     @IBOutlet var cardButtons: [UIButton]!
@@ -37,10 +41,24 @@ class ViewController: UIViewController {
     @IBAction func deal(_ sender: UIButton) {
     }
     @IBOutlet weak var score: UILabel!
+
+    func showCard(_ card: Card, on button: UIButton) {
+        var cardViewText = ""
+        for _ in 1...card.number.rawValue {
+            cardViewText += card.shapeView
+        }
+        
+        let cardViewAttributedText = NSAttributedString(
+            string: cardViewText,
+            attributes: card.attributesForString as? [NSAttributedString.Key : Any])
+        
+        button.setAttributedTitle(cardViewAttributedText, for: .normal)
+    }
+
 }
 
 extension Card {
-    //MARK: Here to add or change exact view attributes for model attributes
+    //MARK: this extension is to add or change exact view attributes for model attributes
     
     var shapeView: String {
         switch self.shape {
@@ -64,7 +82,10 @@ extension Card {
         }
     }
     var attributesForString: [AnyHashable:Any] {
-    return [colorAttribute,shadingAttribute].merged(mergeRule: {_,new in new})
+        let commonAttribute: [NSAttributedString.Key:Any] = [
+            .font: UIFont.systemFont(ofSize: 25)
+        ]
+        return [commonAttribute,colorAttribute,shadingAttribute].merged(mergeRule: {_,new in new})
     }
 }
 
