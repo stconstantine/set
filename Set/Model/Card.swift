@@ -18,7 +18,6 @@ struct Card {
     var shading: Shadings
     var color: Colors
     var number: Numbers
-    
-    var isSelected: Bool = false
+
     var isMatched: Bool = false
 }

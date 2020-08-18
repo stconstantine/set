@@ -12,17 +12,27 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        cardButtons.forEach {$0.layer.cornerRadius = 5}
         updateViewFromModel()
+        
     }
-    
-    var game = SetGame(startWith: 11)
-    
     func updateViewFromModel() {
         dealThreeButton.isEnabled = game.canDealThree
         showActualCards()
         updateScore()
     }
+    var cardsSelected: [UIButton] = []
+    var game = SetGame(startWith: 12)
     
+    func setOutlined(_ needToMakeOutlined: Bool, for button: UIButton) {
+        if needToMakeOutlined {
+            button.layer.borderWidth = 3
+            button.layer.borderColor = UIColor.systemRed.cgColor
+        } else {
+            button.layer.borderWidth = 0
+            button.layer.borderColor = UIColor.clear.cgColor
+        }
+    }
     func showActualCards() {
         //TODO: Make it better
         for cardOutletIndex in cardButtons.indices {
@@ -36,8 +46,25 @@ class ViewController: UIViewController {
     }
     
     @IBOutlet weak var dealThreeButton: UIButton!
+    @IBOutlet weak var score: UILabel!
     @IBOutlet var cardButtons: [UIButton]!
-    @IBAction func touchCards(_ sender: UIButton) {
+    
+    @IBAction func touchCard(_ sender: UIButton) {
+        if !sender.isOutlined {
+            cardsSelected.append(sender)
+            switch cardsSelected.count {
+            case 3:
+                setOutlined(true, for: sender)
+                checkForSet(for: cardsSelected)
+                cardsSelected.forEach {unSelect($0)}
+            case ..<3:
+                setOutlined(true, for: sender)
+            default:
+                cardsSelected.forEach {unSelect($0)}
+            }
+        } else {
+            unSelect(sender)
+        }
     }
     @IBAction func dealThreeCards(_ sender: UIButton) {
         for _ in 1...3 {
@@ -52,8 +79,17 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    @IBOutlet weak var score: UILabel!
-
+    func checkForSet(for buttonsWithCards: [UIButton]) {
+        //сконвертировать кнопки в карточки модели
+        //проверить, есть ли сет
+        //если есть, то радостно мигнуть, скрыть кнопки (но через модель и обновление вью), добавить очки
+        //если нет, то зло мигнуть и снизить очки
+    }
+    
+    func unSelect(_ button: UIButton) {
+        setOutlined(false, for: button)
+        cardsSelected.removeAll(where: {$0 == button})
+    }
     func showCard (_ card: Card, on button: UIButton) {
         var cardViewText = ""
         for _ in 1...card.number.rawValue {
@@ -113,3 +149,9 @@ extension Array where Element == [AnyHashable:Any] {
         return reduce([:],{partiallyMergedDict, dictToMerge in partiallyMergedDict.merging(dictToMerge, uniquingKeysWith: mergeRule)})
     }
 }
+extension UIButton {
+    var isOutlined:Bool {
+        return self.layer.borderWidth > 0
+    }
+}
+

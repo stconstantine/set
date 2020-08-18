@@ -12,8 +12,8 @@ struct SetGame {
     var deck = Deck()
     var canDealThree = true
     var score = 10
-    
     var cardsShown: [Card]
+    
     func setMade(with cards:[Card]) -> Bool {
         
         var distinctNumbers = Set<Card.Numbers>()
