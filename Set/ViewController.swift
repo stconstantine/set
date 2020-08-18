@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    let game = SetGame(startWith: 13)
+    var game = SetGame(startWith: 11)
     
     func updateViewFromModel() {
         dealThreeButton.isEnabled = game.canDealThree
@@ -39,7 +39,19 @@ class ViewController: UIViewController {
     @IBOutlet var cardButtons: [UIButton]!
     @IBAction func touchCards(_ sender: UIButton) {
     }
-    @IBAction func dealThreeCards(_ sender: UIButton) {}
+    @IBAction func dealThreeCards(_ sender: UIButton) {
+        for _ in 1...3 {
+            if let card = game.deck.draw() {
+                game.cardsShown += [card]
+            }
+        }
+        if game.cardsShown.count > cardButtons.count-3 {
+            game.canDealThree = false
+        }
+        game.score -= 3
+        updateViewFromModel()
+    }
+    
     @IBOutlet weak var score: UILabel!
 
     func showCard (_ card: Card, on button: UIButton) {
@@ -60,7 +72,7 @@ class ViewController: UIViewController {
         button.isEnabled = false
     }
     func updateScore() {
-
+        score.text = "Score: \(game.score)"
     }
 }
 

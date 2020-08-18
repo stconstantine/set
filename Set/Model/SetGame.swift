@@ -9,9 +9,9 @@
 import Foundation
 
 struct SetGame {
-    private(set) var deck = Deck()
-    
+    var deck = Deck()
     var canDealThree = true
+    var score = 10
     
     var cardsShown: [Card]
     func setMade(with cards:[Card]) -> Bool {
