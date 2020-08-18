@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Card {
+struct Card: Equatable {
     enum Numbers: Int, CaseIterable {case one=1, two, three}
     enum Shapes: CaseIterable {case diamond, wave, oval}
     enum Shadings: CaseIterable {case clear, stripped, solid}
@@ -18,6 +18,4 @@ struct Card {
     var shading: Shadings
     var color: Colors
     var number: Numbers
-
-    var isMatched: Bool = false
 }

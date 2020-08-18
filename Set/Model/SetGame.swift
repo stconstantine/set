@@ -9,12 +9,25 @@
 import Foundation
 
 struct SetGame {
-    var deck = Deck()
-    var canDealThree = true
-    var score = 10
+    private var deck = Deck()
+    var canDeal: Bool {
+        if deck.count<3 || cardsShown.count > showCardLimit-3 {
+            return false
+        }
+        return true
+    }
+    var score: Int
+    var showCardLimit: Int
     var cardsShown: [Card]
+    var deckCount: Int {
+        return deck.count
+    }
     
-    func setMade(with cards:[Card]) -> Bool {
+    mutating func draw() -> Card? {
+        score += scoreValues[.drawCard] ?? 0
+        return deck.draw()
+    }
+    mutating func setMade(with cards:[Card]) -> Bool {
         
         var distinctNumbers = Set<Card.Numbers>()
         for theCard in cards {distinctNumbers.insert(theCard.number)}
@@ -27,13 +40,17 @@ struct SetGame {
         
         var distinctColors = Set<Card.Colors>()
         for theCard in cards {distinctColors.insert(theCard.color)}
+        
+        if ![distinctNumbers.count,
+             distinctShapes.count,
+             distinctShadings.count,
+             distinctColors.count].contains(2) {
+            score += scoreValues[.setMade] ?? 0
+            return true
+        }
 
-        return ![distinctNumbers.count,
-                distinctShapes.count,
-                distinctShadings.count,
-                distinctColors.count].contains(2)
+        return false
     }
-    
     static var testCardsSet: [Card] {
         return [
             Card(
@@ -70,9 +87,19 @@ struct SetGame {
                 color: .one,
                 number: .one)]
     }
-
-    init(startWith numberOfCards: Int) {
+    let scoreValues: [ScorableActions: Int] = [
+        .gameStart: 10,
+        .drawCard: -1,
+        .setMade: 20
+    ]
+    
+    enum ScorableActions {
+        case drawCard,setMade,selectCard,unselectCard,gameStart
+    }
+    init(startWith numberOfCards: Int, totalShow limit: Int) {
         cardsShown = []
+        showCardLimit = limit
+        score = scoreValues[.gameStart] ?? 10
         for index in 0..<numberOfCards {
             guard let card = deck.draw() else {
                 print ("Couldn't draw 12 card during game init. Drawed only \(index+1) cards from the deck and deck.draw returned nil")
@@ -82,3 +109,4 @@ struct SetGame {
         }
     }
 }
+

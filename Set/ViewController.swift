@@ -14,17 +14,77 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         cardButtons.forEach {$0.layer.cornerRadius = 5}
         updateViewFromModel()
-        
     }
     func updateViewFromModel() {
-        dealThreeButton.isEnabled = game.canDealThree
+        dealThreeButton.isEnabled = game.canDeal
         showActualCards()
-        updateScore()
+        score.text = "Score: \(game.score)"
+        cardsInDeck.text = "Cards in deck: \(game.deckCount)"
     }
-    var cardsSelected: [UIButton] = []
-    var game = SetGame(startWith: 12)
     
-    func setOutlined(_ needToMakeOutlined: Bool, for button: UIButton) {
+    lazy var game = SetGame(
+        startWith: (cardButtons.count / 2),
+        totalShow: cardButtons.count
+    )
+    var cardsSelected = [UIButton]()
+    
+    @IBOutlet weak var dealThreeButton: UIButton!
+    @IBOutlet weak var score: UILabel!
+    @IBOutlet weak var cardsInDeck: UILabel!
+    @IBOutlet var cardButtons: [UIButton]!
+    
+    @IBAction func touchCard(_ sender: UIButton) {
+        if !sender.isOutlined {
+            cardsSelected.append(sender)
+            switch cardsSelected.count {
+            case 3:
+                setOutlined(true, for: sender)
+                checkForSet(for: cardsSelected)
+                cardsSelected.forEach {unselect($0)}
+            case ..<3:
+                setOutlined(true, for: sender)
+            default:
+                cardsSelected.forEach {unselect($0)}
+            }
+        } else {
+            unselect(sender)
+        }
+    }
+    @IBAction func dealThreeCards(_ sender: UIButton) {
+        for _ in 1...3 {
+            if let card = game.draw() {
+                game.cardsShown += [card]
+            }
+        }
+        updateViewFromModel()
+    }
+    
+    private func checkForSet(for buttonsWithCards: [UIButton]) {
+        var cardsToCheck = [Card]()
+        for button in buttonsWithCards {
+            if let cardFound = cardOf(current: button) {
+                cardsToCheck += [cardFound]
+            } else {
+                print("func checkForSet: cardOf returned nil — could not match button and card")
+            }
+        }
+        
+        if game.setMade(with: cardsToCheck) {
+            cardsToCheck.forEach {
+                guard let indexToRemove = game.cardsShown.firstIndex(of: $0) else {return}
+                game.cardsShown.remove(at: indexToRemove)
+            }
+            updateViewFromModel()
+        } else {
+            print("Not set!")
+        }
+    }
+    private func cardOf(current buttonWithCard: UIButton) -> Card? {
+        guard let index = cardButtons.firstIndex(of: buttonWithCard) else {return nil}
+        let card = game.cardsShown[index]
+        return card
+    }
+    private func setOutlined(_ needToMakeOutlined: Bool, for button: UIButton) {
         if needToMakeOutlined {
             button.layer.borderWidth = 3
             button.layer.borderColor = UIColor.systemRed.cgColor
@@ -33,7 +93,7 @@ class ViewController: UIViewController {
             button.layer.borderColor = UIColor.clear.cgColor
         }
     }
-    func showActualCards() {
+    private func showActualCards() {
         //TODO: Make it better
         for cardOutletIndex in cardButtons.indices {
             if cardOutletIndex < game.cardsShown.count {
@@ -44,53 +104,11 @@ class ViewController: UIViewController {
         }
                 
     }
-    
-    @IBOutlet weak var dealThreeButton: UIButton!
-    @IBOutlet weak var score: UILabel!
-    @IBOutlet var cardButtons: [UIButton]!
-    
-    @IBAction func touchCard(_ sender: UIButton) {
-        if !sender.isOutlined {
-            cardsSelected.append(sender)
-            switch cardsSelected.count {
-            case 3:
-                setOutlined(true, for: sender)
-                checkForSet(for: cardsSelected)
-                cardsSelected.forEach {unSelect($0)}
-            case ..<3:
-                setOutlined(true, for: sender)
-            default:
-                cardsSelected.forEach {unSelect($0)}
-            }
-        } else {
-            unSelect(sender)
-        }
-    }
-    @IBAction func dealThreeCards(_ sender: UIButton) {
-        for _ in 1...3 {
-            if let card = game.deck.draw() {
-                game.cardsShown += [card]
-            }
-        }
-        if game.cardsShown.count > cardButtons.count-3 {
-            game.canDealThree = false
-        }
-        game.score -= 3
-        updateViewFromModel()
-    }
-    
-    func checkForSet(for buttonsWithCards: [UIButton]) {
-        //сконвертировать кнопки в карточки модели
-        //проверить, есть ли сет
-        //если есть, то радостно мигнуть, скрыть кнопки (но через модель и обновление вью), добавить очки
-        //если нет, то зло мигнуть и снизить очки
-    }
-    
-    func unSelect(_ button: UIButton) {
+    private func unselect(_ button: UIButton) {
         setOutlined(false, for: button)
         cardsSelected.removeAll(where: {$0 == button})
     }
-    func showCard (_ card: Card, on button: UIButton) {
+    private func showCard (_ card: Card, on button: UIButton) {
         var cardViewText = ""
         for _ in 1...card.number.rawValue {
             cardViewText += card.shapeView
@@ -102,13 +120,11 @@ class ViewController: UIViewController {
         button.isEnabled = true
         button.backgroundColor = .systemFill
     }
-    func hideCard(on button: UIButton) {
+    private func hideCard(on button: UIButton) {
         button.backgroundColor = .clear
+        button.setAttributedTitle(NSAttributedString(string: ""), for: .disabled)
         button.setTitle("", for: .disabled)
         button.isEnabled = false
-    }
-    func updateScore() {
-        score.text = "Score: \(game.score)"
     }
 }
 
@@ -138,7 +154,7 @@ extension Card {
     }
     var attributesForString: [AnyHashable:Any] {
         let commonAttribute: [NSAttributedString.Key:Any] = [
-            .font: UIFont.systemFont(ofSize: 35)
+            .font: UIFont.systemFont(ofSize: 20)
         ]
         return [commonAttribute,colorAttribute,shadingAttribute].merged(mergeRule: {_,new in new})
     }
@@ -154,4 +170,3 @@ extension UIButton {
         return self.layer.borderWidth > 0
     }
 }
-

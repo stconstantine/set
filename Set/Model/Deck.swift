@@ -9,13 +9,10 @@
 import Foundation
 
 struct Deck {
-    
     private var cards = [Card]()
-    
     var count: Int {
         return cards.count
     }
-    
     mutating func draw() -> Card? {
         if cards.count > 0 {
             return cards.remove(at: cards.count.random)
