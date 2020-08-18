@@ -47,9 +47,10 @@ struct SetGame {
              distinctColors.count].contains(2) {
             score += scoreValues[.setMade] ?? 0
             return true
+        } else {
+            score += scoreValues[.setWrong] ?? 0
+            return false
         }
-
-        return false
     }
     static var testCardsSet: [Card] {
         return [
@@ -90,11 +91,12 @@ struct SetGame {
     let scoreValues: [ScorableActions: Int] = [
         .gameStart: 10,
         .drawCard: -1,
-        .setMade: 20
+        .setMade: 20,
+        .setWrong: -5
     ]
     
     enum ScorableActions {
-        case drawCard,setMade,selectCard,unselectCard,gameStart
+        case drawCard,setMade,selectCard,unselectCard,gameStart,setWrong
     }
     init(startWith numberOfCards: Int, totalShow limit: Int) {
         cardsShown = []

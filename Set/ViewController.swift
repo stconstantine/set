@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreGraphics
 
 class ViewController: UIViewController {
     
@@ -32,7 +33,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var score: UILabel!
     @IBOutlet weak var cardsInDeck: UILabel!
     @IBOutlet var cardButtons: [UIButton]!
-    
     @IBAction func touchCard(_ sender: UIButton) {
         if !sender.isOutlined {
             cardsSelected.append(sender)
@@ -59,6 +59,15 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
+    func blinkView(with backgroundColor: UIColor) {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.view.backgroundColor = backgroundColor
+        })
+        UIView.animate(withDuration: 0.2, animations: {
+            self.view.backgroundColor = .systemBackground
+        })
+    }
+    
     private func checkForSet(for buttonsWithCards: [UIButton]) {
         var cardsToCheck = [Card]()
         for button in buttonsWithCards {
@@ -70,14 +79,17 @@ class ViewController: UIViewController {
         }
         
         if game.setMade(with: cardsToCheck) {
+            blinkView(with: .systemGreen)
             cardsToCheck.forEach {
                 guard let indexToRemove = game.cardsShown.firstIndex(of: $0) else {return}
                 game.cardsShown.remove(at: indexToRemove)
             }
-            updateViewFromModel()
+            
         } else {
+            blinkView(with: .systemRed)
             print("Not set!")
         }
+        updateViewFromModel()
     }
     private func cardOf(current buttonWithCard: UIButton) -> Card? {
         guard let index = cardButtons.firstIndex(of: buttonWithCard) else {return nil}
