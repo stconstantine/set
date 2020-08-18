@@ -10,8 +10,10 @@ import Foundation
 
 struct SetGame {
     private(set) var deck = Deck()
-    var cardsDrawn: [Card]?
     
+    var canDealThree = true
+    
+    var cardsShown: [Card]
     func setMade(with cards:[Card]) -> Bool {
         
         var distinctNumbers = Set<Card.Numbers>()
@@ -67,5 +69,16 @@ struct SetGame {
                 shading: .clear,
                 color: .one,
                 number: .one)]
+    }
+
+    init(startWith numberOfCards: Int) {
+        cardsShown = []
+        for index in 0..<numberOfCards {
+            guard let card = deck.draw() else {
+                print ("Couldn't draw 12 card during game init. Drawed only \(index+1) cards from the deck and deck.draw returned nil")
+                return
+            }
+            cardsShown.append(card)
+        }
     }
 }

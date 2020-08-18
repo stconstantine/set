@@ -12,49 +12,56 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        prepareForStart()
-        
+        updateViewFromModel()
     }
-    var deck = Deck()
-    let game = SetGame()
     
-    //to fil NSAttributedString.Key.backgroundColor
-    let cardShadingAttribute = [Card.Shadings.solid:UIColor.systemYellow,
-                                Card.Shadings.stripped:UIColor.systemTeal,
-                                Card.Shadings.clear:UIColor.clear
-    ]
+    let game = SetGame(startWith: 13)
     
-    func prepareForStart() {
-        if cardButtons.count>=12 {
-            for cardIndex in 0...12 {
-                cardButtons[cardIndex].isHidden = false
-                cardButtons[cardIndex].isEnabled = true
-                showCard(deck.draw()!, on: cardButtons[cardIndex])
+    func updateViewFromModel() {
+        dealThreeButton.isEnabled = game.canDealThree
+        showActualCards()
+        updateScore()
+    }
+    
+    func showActualCards() {
+        //TODO: Make it better
+        for cardOutletIndex in cardButtons.indices {
+            if cardOutletIndex < game.cardsShown.count {
+                showCard(game.cardsShown[cardOutletIndex], on: cardButtons[cardOutletIndex])
+            } else {
+                hideCard(on: cardButtons[cardOutletIndex])
             }
         }
-
+                
     }
     
+    @IBOutlet weak var dealThreeButton: UIButton!
     @IBOutlet var cardButtons: [UIButton]!
     @IBAction func touchCards(_ sender: UIButton) {
     }
-    @IBAction func deal(_ sender: UIButton) {
-    }
+    @IBAction func dealThreeCards(_ sender: UIButton) {}
     @IBOutlet weak var score: UILabel!
 
-    func showCard(_ card: Card, on button: UIButton) {
+    func showCard (_ card: Card, on button: UIButton) {
         var cardViewText = ""
         for _ in 1...card.number.rawValue {
             cardViewText += card.shapeView
         }
-        
         let cardViewAttributedText = NSAttributedString(
             string: cardViewText,
             attributes: card.attributesForString as? [NSAttributedString.Key : Any])
-        
         button.setAttributedTitle(cardViewAttributedText, for: .normal)
+        button.isEnabled = true
+        button.backgroundColor = .systemFill
     }
+    func hideCard(on button: UIButton) {
+        button.backgroundColor = .clear
+        button.setTitle("", for: .disabled)
+        button.isEnabled = false
+    }
+    func updateScore() {
 
+    }
 }
 
 extension Card {
@@ -83,12 +90,11 @@ extension Card {
     }
     var attributesForString: [AnyHashable:Any] {
         let commonAttribute: [NSAttributedString.Key:Any] = [
-            .font: UIFont.systemFont(ofSize: 25)
+            .font: UIFont.systemFont(ofSize: 35)
         ]
         return [commonAttribute,colorAttribute,shadingAttribute].merged(mergeRule: {_,new in new})
     }
 }
-
 extension Array where Element == [AnyHashable:Any] {
     // func to merge array of dictionaries by some merging rule, passed as a closure. Used to merge several dictionaries with NSAttributedString attributes.
     func merged(mergeRule: (Any, Any) -> Any) -> [AnyHashable:Any] {
