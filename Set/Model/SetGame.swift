@@ -8,26 +8,26 @@
 
 import Foundation
 
-struct SetGame {
+class SetGame {
     private var deck = Deck()
     var canDeal: Bool {
-        if deck.count<3 || cardsShown.count > showCardLimit-3 {
+        if deck.count<3 || cardsActive.count > showCardLimit-3 {
             return false
         }
         return true
     }
     var score: Int
     var showCardLimit: Int
-    var cardsShown: [Card]
+    var cardsActive: [Card]
     var deckCount: Int {
         return deck.count
     }
     
-    mutating func draw() -> Card? {
+    func draw() -> Card? {
         score += scoreValues[.drawCard] ?? 0
         return deck.draw()
     }
-    mutating func setMade(with cards:[Card]) -> Bool {
+    func setMade(with cards:[Card]) -> Bool {
         
         var distinctNumbers = Set<Card.Numbers>()
         for theCard in cards {distinctNumbers.insert(theCard.number)}
@@ -94,12 +94,11 @@ struct SetGame {
         .setMade: 20,
         .setWrong: -5
     ]
-    
     enum ScorableActions {
         case drawCard,setMade,selectCard,unselectCard,gameStart,setWrong
     }
     init(startWith numberOfCards: Int, totalShow limit: Int) {
-        cardsShown = []
+        cardsActive = []
         showCardLimit = limit
         score = scoreValues[.gameStart] ?? 10
         for index in 0..<numberOfCards {
@@ -107,7 +106,7 @@ struct SetGame {
                 print ("Couldn't draw 12 card during game init. Drawed only \(index+1) cards from the deck and deck.draw returned nil")
                 return
             }
-            cardsShown.append(card)
+            cardsActive.append(card)
         }
     }
 }

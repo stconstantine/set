@@ -27,7 +27,16 @@ class ViewController: UIViewController {
         startWith: (cardButtons.count / 2),
         totalShow: cardButtons.count
     )
+    
     var cardsSelected = [UIButton]()
+    
+    @IBAction func restartGame(_ sender: Any) {
+        game = SetGame(
+            startWith: (cardButtons.count / 2),
+            totalShow: cardButtons.count
+        )
+        updateViewFromModel()
+    }
     
     @IBOutlet weak var dealThreeButton: UIButton!
     @IBOutlet weak var score: UILabel!
@@ -53,7 +62,7 @@ class ViewController: UIViewController {
     @IBAction func dealThreeCards(_ sender: UIButton) {
         for _ in 1...3 {
             if let card = game.draw() {
-                game.cardsShown += [card]
+                game.cardsActive += [card]
             }
         }
         updateViewFromModel()
@@ -81,21 +90,21 @@ class ViewController: UIViewController {
         if game.setMade(with: cardsToCheck) {
             blinkView(with: .systemGreen)
             cardsToCheck.forEach {
-                guard let indexToRemove = game.cardsShown.firstIndex(of: $0) else {return}
-                game.cardsShown.remove(at: indexToRemove)
+                guard let indexToRemove = game.cardsActive.firstIndex(of: $0) else {return}
+                game.cardsActive.remove(at: indexToRemove)
             }
             
         } else {
             blinkView(with: .systemRed)
-            print("Not set!")
         }
         updateViewFromModel()
     }
+    
     private func cardOf(current buttonWithCard: UIButton) -> Card? {
         guard let index = cardButtons.firstIndex(of: buttonWithCard) else {return nil}
-        let card = game.cardsShown[index]
-        return card
+        return game.cardsActive[index]
     }
+    
     private func setOutlined(_ needToMakeOutlined: Bool, for button: UIButton) {
         if needToMakeOutlined {
             button.layer.borderWidth = 3
@@ -105,11 +114,12 @@ class ViewController: UIViewController {
             button.layer.borderColor = UIColor.clear.cgColor
         }
     }
+    
     private func showActualCards() {
         //TODO: Make it better
         for cardOutletIndex in cardButtons.indices {
-            if cardOutletIndex < game.cardsShown.count {
-                showCard(game.cardsShown[cardOutletIndex], on: cardButtons[cardOutletIndex])
+            if cardOutletIndex < game.cardsActive.count {
+                showCard(game.cardsActive[cardOutletIndex], on: cardButtons[cardOutletIndex])
             } else {
                 hideCard(on: cardButtons[cardOutletIndex])
             }
@@ -120,6 +130,7 @@ class ViewController: UIViewController {
         setOutlined(false, for: button)
         cardsSelected.removeAll(where: {$0 == button})
     }
+    
     private func showCard (_ card: Card, on button: UIButton) {
         var cardViewText = ""
         for _ in 1...card.number.rawValue {

@@ -20,7 +20,6 @@ struct Deck {
             return nil
         }
     }
-    
     init() {
         for number in Card.Numbers.allCases {
             for shape in Card.Shapes.allCases {
