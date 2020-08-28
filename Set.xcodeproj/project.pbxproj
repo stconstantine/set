@@ -30,6 +30,7 @@
 		B54B281D24DC070F00F6E4A3 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		B54B282024DC072500F6E4A3 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		B54B282224DC073700F6E4A3 /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
+		B5E983D524F94EFF00A49711 /* Set.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Set.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +63,7 @@
 		B54B280724DC02C600F6E4A3 /* Set */ = {
 			isa = PBXGroup;
 			children = (
+				B5E983D524F94EFF00A49711 /* Set.entitlements */,
 				B54B281C24DC06EF00F6E4A3 /* Supporting files */,
 				B54B281F24DC071200F6E4A3 /* Model */,
 				B54B281124DC02C800F6E4A3 /* Assets.xcassets */,
@@ -312,6 +314,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Set/Set.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JUZY3KJRDX;
 				INFOPLIST_FILE = Set/Info.plist;
@@ -321,6 +324,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Starodubtsev.Set;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -330,6 +334,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Set/Set.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JUZY3KJRDX;
 				INFOPLIST_FILE = Set/Info.plist;
@@ -339,6 +344,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Starodubtsev.Set;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
