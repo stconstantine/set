@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -16,57 +15,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Wyv-Nw-eO1">
-                                <rect key="frame" x="30" y="746" width="354" height="106"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="left" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="hrw-Vt-Ddb">
-                                        <rect key="frame" x="0.0" y="0.0" width="116" height="106"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iJr-jm-NrM">
-                                                <rect key="frame" x="0.0" y="0.0" width="116" height="30"/>
-                                                <state key="normal" title="Restart game"/>
-                                                <connections>
-                                                    <action selector="restartGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zl3-yx-QWv"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Score: 1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W4h-Yf-JKl">
-                                                <rect key="frame" x="0.0" y="38" width="116" height="30"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cards in deck: 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1HJ-4m-0uF">
-                                                <rect key="frame" x="0.0" y="76" width="116" height="30"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                    </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xQi-3z-cgf">
-                                        <rect key="frame" x="219" y="0.0" width="135" height="106"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <state key="normal" title="Deal 3 cards"/>
-                                        <connections>
-                                            <action selector="dealThreeCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="P0i-7x-yKa"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
+                            <view opaque="NO" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="8Mr-S5-oUb" customClass="SetCardView" customModule="Set" customModuleProvider="target">
+                                <rect key="frame" x="10" y="54" width="394" height="798"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="Wyv-Nw-eO1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="8Jc-ih-04V"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Wyv-Nw-eO1" secondAttribute="trailing" constant="30" id="9dF-9V-fzb"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Wyv-Nw-eO1" secondAttribute="bottom" constant="10" id="u9E-ov-Wcn"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8Mr-S5-oUb" secondAttribute="trailing" constant="10" id="KuZ-M7-8vi"/>
+                            <constraint firstItem="8Mr-S5-oUb" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="f3P-yv-v5h"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8Mr-S5-oUb" secondAttribute="bottom" constant="10" id="oA0-1o-gaU"/>
+                            <constraint firstItem="8Mr-S5-oUb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="tfJ-gs-LOO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <connections>
-                        <outlet property="cardsInDeck" destination="1HJ-4m-0uF" id="Da6-aW-I2O"/>
-                        <outlet property="dealThreeButton" destination="xQi-3z-cgf" id="Vj4-Bc-qZO"/>
-                        <outlet property="score" destination="W4h-Yf-JKl" id="bik-L6-mSB"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

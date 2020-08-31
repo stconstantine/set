@@ -16,6 +16,8 @@
 		B54B281E24DC070F00F6E4A3 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B281D24DC070F00F6E4A3 /* Card.swift */; };
 		B54B282124DC072500F6E4A3 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B282024DC072500F6E4A3 /* Deck.swift */; };
 		B54B282324DC073700F6E4A3 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B282224DC073700F6E4A3 /* SetGame.swift */; };
+		B5E983D724FAF67400A49711 /* SetCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E983D624FAF67400A49711 /* SetCardView.swift */; };
+		B5E983D924FD433C00A49711 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E983D824FD433B00A49711 /* Grid.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,8 @@
 		B54B282024DC072500F6E4A3 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		B54B282224DC073700F6E4A3 /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
 		B5E983D524F94EFF00A49711 /* Set.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Set.entitlements; sourceTree = "<group>"; };
+		B5E983D624FAF67400A49711 /* SetCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardView.swift; sourceTree = "<group>"; };
+		B5E983D824FD433B00A49711 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,7 @@
 		B54B280724DC02C600F6E4A3 /* Set */ = {
 			isa = PBXGroup;
 			children = (
+				B5E983DA24FD438C00A49711 /* Views */,
 				B5E983D524F94EFF00A49711 /* Set.entitlements */,
 				B54B281C24DC06EF00F6E4A3 /* Supporting files */,
 				B54B281F24DC071200F6E4A3 /* Model */,
@@ -92,6 +97,15 @@
 				B54B282224DC073700F6E4A3 /* SetGame.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		B5E983DA24FD438C00A49711 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B5E983D824FD433B00A49711 /* Grid.swift */,
+				B5E983D624FAF67400A49711 /* SetCardView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,6 +181,8 @@
 			files = (
 				B53DC4EC24E17CB400210C9C /* ViewController.swift in Sources */,
 				B54B280924DC02C600F6E4A3 /* AppDelegate.swift in Sources */,
+				B5E983D724FAF67400A49711 /* SetCardView.swift in Sources */,
+				B5E983D924FD433C00A49711 /* Grid.swift in Sources */,
 				B54B282124DC072500F6E4A3 /* Deck.swift in Sources */,
 				B54B280B24DC02C600F6E4A3 /* SceneDelegate.swift in Sources */,
 				B54B282324DC073700F6E4A3 /* SetGame.swift in Sources */,
