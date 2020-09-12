@@ -13,14 +13,15 @@ import UIKit
 class SetCardView: UIView {
     //MARK: Constants
     private var itemBorderWidth: CGFloat {
-        return max(max(bounds.width,bounds.height)/150,1)
+        return max(max(bounds.width,bounds.height)/200,1)
     }
     private var cardCornerRadius: CGFloat {
-        return itemBorderWidth * 1.5
+        return itemBorderWidth * 5
     }
-    @IBInspectable private var cardBackgroundColor: UIColor = .systemBackground
+    private let cardBackgroundColor: UIColor = .white
+    private let stripesDensity: CGFloat = 2.5
     
-    var itemColor: ItemColor = .three
+    var itemColor: ItemColor = .two
     @IBInspectable private var drawColor: UIColor {
         switch itemColor {
         case .one: return .systemRed
@@ -28,15 +29,15 @@ class SetCardView: UIView {
         case .three: return .systemBlue
         }
     }
-    
-    var itemShading: ItemShading = .clear
+
+    var itemShading: ItemShading = .stripped
     var thingShape: ItemShape = .squiggle
     var thingCount: Int = 3
     var isSelected: Bool = false
     var isMatched: Bool = false
+    var isHinted: Bool = false
     
     override func draw(_ rect: CGRect) {
-        
         let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cardCornerRadius)
         cardBackgroundColor.setFill()
         roundedRect.fill()
@@ -78,7 +79,7 @@ class SetCardView: UIView {
         //рисуем каждый прямоугольник и фигурку в нём
         thingPlace.forEach {drawThing(in: $0)}
     }
-    
+
     private func drawThing(in frame: CGRect) {
         var thing: UIBezierPath
         switch thingShape {
@@ -86,22 +87,41 @@ class SetCardView: UIView {
         case .oval:  thing = oval(in: frame)
         case .diamond: thing = diamond(in: frame)
         }
+        
         if itemShading == .solid {
             drawColor.setFill()
-        } else {cardBackgroundColor.setFill()}
+        } else {UIColor.clear.setFill()}
+        
+        thing.lineWidth = itemBorderWidth
+        drawColor.setStroke()
         
         if itemShading == .stripped {
-            drawStripes(in: frame)
+            stripesShading(for: thing, in: frame)
         }
         
         thing.fill()
-        thing.lineWidth = itemBorderWidth
-        drawColor.setStroke()
         thing.stroke()
     }
-    
-    func drawStripes(in frame: CGRect) {
+    private func stripesShading(for item: UIBezierPath,in frame: CGRect) {
+        let context = UIGraphicsGetCurrentContext()
+        context?.saveGState()
+        item.addClip()
         
+        let stripesShading = UIBezierPath()
+        stripesShading.lineWidth = itemBorderWidth * stripesDensity / 5
+        stripesShading.move(to: CGPoint(x: frame.minX, y: bounds.minY))
+        
+        var xpos: CGFloat = frame.minX
+        while xpos < frame.maxX {
+            let line = UIBezierPath()
+            line.move(to: CGPoint(x: xpos, y: bounds.minY))
+            line.addLine(to: CGPoint(x: xpos, y: bounds.maxY))
+            stripesShading.append(line)
+            xpos += itemBorderWidth*stripesDensity
+        }
+        stripesShading.stroke()
+
+        context?.restoreGState()
     }
 
     //MARK: thing pathes
@@ -112,6 +132,7 @@ class SetCardView: UIView {
         path.addLine(to: CGPoint(x: frame.midX,y: frame.maxY))
         path.addLine(to: CGPoint(x: frame.minX,y: frame.midY))
         path.close()
+        
         return path
     }
     private func squiggle(in frame: CGRect) -> UIBezierPath {
