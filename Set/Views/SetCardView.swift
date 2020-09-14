@@ -11,39 +11,69 @@ import UIKit
 
 @IBDesignable
 class SetCardView: UIView {
-    //MARK: Constants
-    private var itemBorderWidth: CGFloat {
+    //MARK: General properties for view
+    private var borderWidthForItemAndCard: CGFloat {
         return max(max(bounds.width,bounds.height)/200,1)
     }
     private var cardCornerRadius: CGFloat {
-        return itemBorderWidth * 5
+        return borderWidthForItemAndCard * 5
     }
-    private let cardBackgroundColor: UIColor = .white
+    private let backgroundDefaultColor: UIColor = .white
+    private let backgroundColorForSelected: UIColor = .systemFill
+    private let backgroundColorForMatched: UIColor = .systemGreen
+    private let backgroundColorForMissmatched: UIColor = .black
+    private let borderColorForHinted: UIColor = .systemTeal
     private let stripesDensity: CGFloat = 2.5
-    
-    var itemColor: ItemColor = .two
-    @IBInspectable private var drawColor: UIColor {
+    private var drawColor: UIColor {
         switch itemColor {
         case .one: return .systemRed
         case .two: return .systemYellow
         case .three: return .systemBlue
         }
     }
-
+    
+    //MARK: Public interface to set card
+    var itemColor: ItemColor = .one
     var itemShading: ItemShading = .stripped
-    var thingShape: ItemShape = .squiggle
+    var thingShape: ItemShape = .oval
     var thingCount: Int = 3
     var isSelected: Bool = false
-    var isMatched: Bool = false
+    var isMatched: Bool?
     var isHinted: Bool = false
     
     override func draw(_ rect: CGRect) {
-        let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cardCornerRadius)
-        cardBackgroundColor.setFill()
-        roundedRect.fill()
+        setStateOfCard()
         drawCard()
     }
     
+    private func setStateOfCard() {
+        //set state of card according to obtained instance properties
+        
+        let insetForBorder = UIEdgeInsets(top: borderWidthForItemAndCard*1.5,
+                                 left: borderWidthForItemAndCard*1.5,
+                                 bottom: borderWidthForItemAndCard*1.5,
+                                 right: borderWidthForItemAndCard*1.5) // inset to make a space in view for thick border of cardShape
+        let cardShape = UIBezierPath(roundedRect: bounds.inset(by: insetForBorder),
+                                     cornerRadius: cardCornerRadius)
+        cardShape.lineWidth = borderWidthForItemAndCard*1.5
+
+        switch isHinted {
+        case true: borderColorForHinted.setStroke()
+        default: UIColor.clear.setStroke()
+        }
+        switch isSelected {
+        case true: backgroundColorForSelected.setFill()
+        default: backgroundDefaultColor.setFill()
+        }
+        switch isMatched {
+        case .some(true): backgroundColorForMatched.setFill()
+        case .some(false): backgroundColorForMissmatched.setFill()
+        case .none: backgroundDefaultColor.setFill()
+        }
+        
+        cardShape.stroke()
+        cardShape.fill()
+    }
     private func drawCard() {
         //функция рисует нужное количество элементов things на карточке
         
@@ -92,7 +122,7 @@ class SetCardView: UIView {
             drawColor.setFill()
         } else {UIColor.clear.setFill()}
         
-        thing.lineWidth = itemBorderWidth
+        thing.lineWidth = borderWidthForItemAndCard
         drawColor.setStroke()
         
         if itemShading == .stripped {
@@ -108,7 +138,7 @@ class SetCardView: UIView {
         item.addClip()
         
         let stripesShading = UIBezierPath()
-        stripesShading.lineWidth = itemBorderWidth * stripesDensity / 5
+        stripesShading.lineWidth = borderWidthForItemAndCard * stripesDensity / 5
         stripesShading.move(to: CGPoint(x: frame.minX, y: bounds.minY))
         
         var xpos: CGFloat = frame.minX
@@ -117,7 +147,7 @@ class SetCardView: UIView {
             line.move(to: CGPoint(x: xpos, y: bounds.minY))
             line.addLine(to: CGPoint(x: xpos, y: bounds.maxY))
             stripesShading.append(line)
-            xpos += itemBorderWidth*stripesDensity
+            xpos += borderWidthForItemAndCard*stripesDensity
         }
         stripesShading.stroke()
 
