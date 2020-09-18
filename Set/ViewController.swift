@@ -14,8 +14,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let grid = Grid(layout: .aspectRatio(0.75), frame: view.bounds)
-        
+        var grid = Grid(layout: .aspectRatio(0.75), frame: view.bounds)
+        grid.cellCount = 5
         for cardIndex in 0..<grid.cellCount {
             cardViews.append(SetCardView(frame: grid[cardIndex]!))
             view.addSubview(cardViews[cardIndex])

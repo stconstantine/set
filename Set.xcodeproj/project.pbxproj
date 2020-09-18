@@ -15,6 +15,7 @@
 		B54B281E24DC070F00F6E4A3 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B281D24DC070F00F6E4A3 /* Card.swift */; };
 		B54B282124DC072500F6E4A3 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B282024DC072500F6E4A3 /* Deck.swift */; };
 		B54B282324DC073700F6E4A3 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B282224DC073700F6E4A3 /* SetGame.swift */; };
+		B578FB482515297800F01212 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B578FB472515297800F01212 /* Main.storyboard */; };
 		B5E983D724FAF67400A49711 /* SetCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E983D624FAF67400A49711 /* SetCardView.swift */; };
 		B5E983D924FD433C00A49711 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E983D824FD433B00A49711 /* Grid.swift */; };
 /* End PBXBuildFile section */
@@ -30,6 +31,7 @@
 		B54B281D24DC070F00F6E4A3 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		B54B282024DC072500F6E4A3 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		B54B282224DC073700F6E4A3 /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
+		B578FB472515297800F01212 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		B5E983D524F94EFF00A49711 /* Set.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Set.entitlements; sourceTree = "<group>"; };
 		B5E983D624FAF67400A49711 /* SetCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardView.swift; sourceTree = "<group>"; };
 		B5E983D824FD433B00A49711 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				B54B281124DC02C800F6E4A3 /* Assets.xcassets */,
 				B5E983D824FD433B00A49711 /* Grid.swift */,
 				B53DC4EB24E17CB400210C9C /* ViewController.swift */,
+				B578FB472515297800F01212 /* Main.storyboard */,
 				B54B281624DC02C800F6E4A3 /* Info.plist */,
 			);
 			path = Set;
@@ -163,6 +166,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B578FB482515297800F01212 /* Main.storyboard in Resources */,
 				B54B281524DC02C800F6E4A3 /* LaunchScreen.storyboard in Resources */,
 				B54B281224DC02C800F6E4A3 /* Assets.xcassets in Resources */,
 			);
