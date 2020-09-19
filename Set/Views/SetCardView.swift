@@ -7,12 +7,10 @@
 //
 
 import UIKit
-//import CoreGraphics
 
 @IBDesignable
+
 class SetCardView: UIView {
-    
-    
     //MARK: Public interface to set card
     var itemColor: ItemColor = .one
     var itemShading: ItemShading = .stripped {didSet {setNeedsDisplay()}}
@@ -126,7 +124,6 @@ class SetCardView: UIView {
     private func showReverse() {
         let reverseImage: UIImage? = UIImage(named: "cardReverseImage")
         reverseImage?.draw(in: bounds)
-        print("Reverse!")
     }
     //MARK: thing pathes
     private func diamond(in frame: CGRect) -> UIBezierPath {
@@ -139,6 +136,7 @@ class SetCardView: UIView {
         
         return path
     }
+    
     private func squiggle(in frame: CGRect) -> UIBezierPath {
         let upperSquiggle = UIBezierPath()
         let sqdx = frame.width * 0.1
