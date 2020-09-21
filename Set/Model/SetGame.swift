@@ -16,6 +16,7 @@ class SetGame {
         }
         return true
     }
+    
     var score: Int
     var showCardLimit: Int
     var cardsActive: [Card]

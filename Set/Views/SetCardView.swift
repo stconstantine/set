@@ -16,43 +16,26 @@ class SetCardView: UIView {
     var itemShading: ItemShading = .stripped {didSet {setNeedsDisplay()}}
     var itemShape: ItemShape = .squiggle {didSet {setNeedsDisplay()}}
     var itemsCount: Int = 3 {didSet {setNeedsDisplay()}}
-    var isSelected: Bool = true {didSet {setNeedsDisplay()}}
-    var isMatched: Bool? {didSet {setNeedsDisplay()}}
-    var isHinted: Bool = false {didSet {setNeedsDisplay()}}
-    var isFacedUp: Bool = true {didSet {setNeedsDisplay()}}
-    func flip() {
-        isFacedUp = !isFacedUp
-    }
+    var status: CardStatus = .default {didSet {setNeedsDisplay()}}
+    var isFacedUp: Bool = true
     
+    private lazy var cardShape = UIBezierPath(rect: bounds)
+
     override func draw(_ rect: CGRect) {
-        updateStateOfCard()
-        drawCard()
+        drawCardBulk()
+        drawCardElements()
         contentMode = .redraw
     }
 
-    private func updateStateOfCard() {
-        let insetForBorder = UIEdgeInsets(top: borderWidthForItemAndCard*1.5,
-                                                       left: borderWidthForItemAndCard*1.5,
-                                                       bottom: borderWidthForItemAndCard*1.5,
-                                                       right: borderWidthForItemAndCard*1.5) // inset to make a space in view for thick border of cardShape
-        let cardShape = UIBezierPath(roundedRect: bounds.inset(by: insetForBorder),
-                                                  cornerRadius: cardCornerRadius)
+    private func drawCardBulk() {
+        clipsToBounds = true
+        layer.cornerRadius = cardCornerRadius
         
-        cardShape.lineWidth = borderWidthForItemAndCard*1.5
-        cardShape.addClip()
-        
-        switch isHinted {
-        case true: borderColorForHinted.setStroke()
-        default: UIColor.clear.setStroke()
-        }
-        switch isSelected {
-        case true: backgroundColorForSelected.setFill()
+        switch status {
+        case .hinted: backgroundColorForHinted.setFill()
+        case .matched: backgroundColorForMatched.setFill()
+        case .selected: backgroundColorForSelected.setFill()
         default: backgroundDefaultColor.setFill()
-        }
-        switch isMatched {
-        case .some(true): backgroundColorForMatched.setFill()
-        case .some(false): backgroundColorForMissmatched.setFill()
-        case .none: backgroundDefaultColor.setFill()
         }
         
         cardShape.stroke()
@@ -60,22 +43,14 @@ class SetCardView: UIView {
     }
     
     //MARK: draw card and an distinct item ("thing") depending on public properties
-    private func drawCard() {
-        //функция рисует нужное количество элементов things на карточке или рубашку
-        if !isFacedUp {
-            showReverse()
-            return
-        }
+    private func drawCardElements() {
         
-        //создаём массив фреймов для элементов и массив начальных точек для расположения этих элементов
+        
+        if !isFacedUp { showReverse(); return }
         var thingPlace = [CGRect]()
         var thingPlaceOrigin = [CGPoint]()
-        
-        //Создаём размер фрейма
         let thingPlaceSize = CGSize(width: layer.bounds.maxX*0.8,
                                     height: layer.bounds.maxY*0.2)
-        
-        //Заполняем массив начальных точек в зависимости от необходимого количества элементов к отрисовке
         switch itemsCount {
         case 2:
             thingPlaceOrigin.append(CGPoint(x: (bounds.width-thingPlaceSize.width)/2,
@@ -93,10 +68,7 @@ class SetCardView: UIView {
             thingPlaceOrigin.append(CGPoint(x: (bounds.width-thingPlaceSize.width)/2,
                                          y: (bounds.height-thingPlaceSize.height)/2))
         }
-        
-        //заполняем массив фреймов — создаём прямоугольник для каждой начальной точки
         thingPlace = thingPlaceOrigin.map {CGRect(origin: $0, size: thingPlaceSize)}
-        //рисуем каждый прямоугольник и фигурку в нём
         thingPlace.forEach {drawThing(in: $0)}
     }
     private func drawThing(in frame: CGRect) {
@@ -125,6 +97,7 @@ class SetCardView: UIView {
         let reverseImage: UIImage? = UIImage(named: "cardReverseImage")
         reverseImage?.draw(in: bounds)
     }
+    
     //MARK: thing pathes
     private func diamond(in frame: CGRect) -> UIBezierPath {
         let path = UIBezierPath()
@@ -136,7 +109,6 @@ class SetCardView: UIView {
         
         return path
     }
-    
     private func squiggle(in frame: CGRect) -> UIBezierPath {
         let upperSquiggle = UIBezierPath()
         let sqdx = frame.width * 0.1
@@ -177,7 +149,6 @@ class SetCardView: UIView {
     private func oval(in frame: CGRect) -> UIBezierPath {
         return UIBezierPath(ovalIn: frame)
     }
-    
     private func stripesShading(for item: UIBezierPath,in frame: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         context?.saveGState()
@@ -200,9 +171,9 @@ class SetCardView: UIView {
         context?.restoreGState()
     }
     
-    //MARK: General properties for view
+    //MARK: General parameters for card view
     private var borderWidthForItemAndCard: CGFloat {
-        return max(max(bounds.width,bounds.height)/200,1)
+        return max(max(bounds.width,bounds.height)/100,1)
     }
     private var cardCornerRadius: CGFloat {
         return borderWidthForItemAndCard * 5
@@ -215,12 +186,12 @@ class SetCardView: UIView {
         }
     }
     private let backgroundDefaultColor: UIColor = .white
-    private let backgroundColorForSelected: UIColor = .systemFill
+    private let backgroundColorForSelected: UIColor = .darkGray
     private let backgroundColorForMatched: UIColor = .systemGreen
-    private let backgroundColorForMissmatched: UIColor = .black
-    private let borderColorForHinted: UIColor = .systemTeal
+    private let backgroundColorForHinted: UIColor = #colorLiteral(red: 0.7952989892, green: 0.9228176517, blue: 1, alpha: 1)
     private let stripesDensity: CGFloat = 2.5
     
+    enum CardStatus: CaseIterable {case matched, selected, hinted, `default`}
     enum ItemShape: CaseIterable {case diamond, squiggle, oval}
     enum ItemShading: CaseIterable {case clear, stripped, solid}
     enum ItemColor: CaseIterable {case one, two, three}

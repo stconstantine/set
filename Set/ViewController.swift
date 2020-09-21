@@ -31,8 +31,37 @@ class ViewController: UIViewController {
         field.remove(cardViewAt: field.count-1)
     }
     
-    @IBAction func flipCard(_ sender: Any) {
+    @IBAction func shuffleCards(_ sender: Any) {
         field.shuffleCards()
+    }
+    
+    @IBAction func hintCard(_ sender: Any) {
+        let card = field.cardViews[0]
+        
+        if card.status == .hinted {
+            card.status = .default
+        } else {
+            card.status = .hinted
+        }
+    }
+    @IBAction func matchCard(_ sender: Any) {
+        let card = field.cardViews[0]
+        
+        if card.status == .matched {
+            card.status = .default
+        } else {
+            card.status = .matched
+        }
+    }
+    
+    @IBAction func selectCard(_ sender: Any) {
+        let card = field.cardViews[0]
+        
+        if card.status == .selected {
+            card.status = .default
+        } else {
+            card.status = .selected
+        }
     }
 }
 
