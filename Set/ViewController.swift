@@ -10,14 +10,26 @@ import UIKit
 //import CoreGraphics
 
 class ViewController: UIViewController {
-
-    let game = SetGame(startWith: 12, totalShow: 81)
     override func viewDidLoad() {
         super.viewDidLoad()
-        putCardOnATable()
+        addFieldRecognizers()
+        deal3MoreCards(self)
     }
     
-    @objc func handleTapOnCard(_ sender: UITapGestureRecognizer) {
+    let game = SetGame(startWith: 12, totalShow: 81)
+    @IBOutlet weak var field: SetFieldView!
+    
+    @objc private func handleSwipe(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            deal3MoreCards(sender)
+        }
+    }
+    @objc private func handleRotate(_ sender: UIRotationGestureRecognizer) {
+        if sender.state == .ended, field.cardViews.count>1 {
+            field.shuffleCards()
+        }
+    }
+    @objc private func handleTapOnCard(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             let cardView = sender.view as? SetCardView
             if cardView?.status == .selected {
@@ -28,76 +40,36 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func handleRotate(_ sender: UIRotationGestureRecognizer) {
-        if sender.state == .ended, field.cardViews.count>1 {
-            field.shuffleCards()
-        }
+    private func addFieldRecognizers() {
+        let swipeRecognizer = UISwipeGestureRecognizer(target: self,
+                                                       action: #selector (self.handleSwipe(_:)))
+        let rotateRecognizer = UIRotationGestureRecognizer(target: self,
+                                                            action: #selector (self.handleRotate(_:)))
+        swipeRecognizer.numberOfTouchesRequired = 1
+        swipeRecognizer.direction = .up
+        
+        field.addGestureRecognizer(swipeRecognizer)
+        field.addGestureRecognizer(rotateRecognizer)
     }
-    
-    func addTapRecognizer(to cardView: SetCardView) {
+    private func addTapRecognizer(to cardView: SetCardView) {
         let recognizer = UITapGestureRecognizer(target: self,
                                                 action: #selector (self.handleTapOnCard(_:)))
         recognizer.numberOfTapsRequired=1
         recognizer.numberOfTouchesRequired=1
         cardView.addGestureRecognizer(recognizer)
     }
-    
-    func putCardOnATable() {
+    private func putCardOnATable() {
         guard let card = game.draw() else {return}
         let cardView = card.view
         addTapRecognizer(to: cardView)
         field.add(cardView)
     }
-    
-    @IBOutlet weak var field: SetFieldView!
-    @IBAction func addCardButton(_ sender: Any) {
-        putCardOnATable()
-    }
-    
-    @IBAction func removeLast(_ sender: Any) {
-        if !field.cardViews.isEmpty {
-            field.remove(cardViewAt: field.count-1)
+    func deal3MoreCards(_ sender: Any) {
+        for _ in 1...3 {
+            putCardOnATable()
         }
     }
-    
-    @IBAction func shuffleCards(_ sender: Any) {
-        field.shuffleCards()
-    }
-    
-    @IBAction func hintCard(_ sender: Any) {
-        if !field.cardViews.isEmpty {
-            let card = field.cardViews[0]
-            
-            if card.status == .hinted {
-                card.status = .default
-            } else {
-                card.status = .hinted
-            }
-        }
-    }
-    
-    @IBAction func matchCard(_ sender: Any) {
-        if !field.cardViews.isEmpty {
-            let card = field.cardViews[0]
-            
-            if card.status == .matched {
-                card.status = .default
-            } else {
-                card.status = .matched
-            }
-        }
-    }
-    
-    @IBAction func selectCard(_ sender: Any) {
-        if !field.cardViews.isEmpty {
-            let card = field.cardViews[0]
-            if card.status == .selected {
-                card.status = .default
-            } else {
-                card.status = .selected
-            }
-        }
-    }
+
 }
 
 extension Card {
