@@ -18,8 +18,6 @@ class SetCardView: UIView {
     var itemsCount: Int = 3 {didSet {setNeedsDisplay()}}
     var status: CardStatus = .default {didSet {setNeedsDisplay()}}
     var isFacedUp: Bool = true
-    
-    private lazy var cardShape = UIBezierPath(rect: bounds)
 
     override func draw(_ rect: CGRect) {
         drawCardBulk()
@@ -30,6 +28,7 @@ class SetCardView: UIView {
     private func drawCardBulk() {
         clipsToBounds = true
         layer.cornerRadius = cardCornerRadius
+        let cardShape = UIBezierPath(rect: bounds)
         
         switch status {
         case .hinted: backgroundColorForHinted.setFill()

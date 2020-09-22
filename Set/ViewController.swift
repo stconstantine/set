@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CoreGraphics
+//import CoreGraphics
 
 class ViewController: UIViewController {
 
@@ -16,9 +16,37 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         putCardOnATable()
     }
+    
+    @objc func handleTapOnCard(_ sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            let cardView = sender.view as? SetCardView
+            if cardView?.status == .selected {
+                cardView?.status = .default
+            } else {
+                cardView?.status = .selected
+            }
+        }
+    }
+    
+    @IBAction func handleRotate(_ sender: UIRotationGestureRecognizer) {
+        if sender.state == .ended, field.cardViews.count>1 {
+            field.shuffleCards()
+        }
+    }
+    
+    func addTapRecognizer(to cardView: SetCardView) {
+        let recognizer = UITapGestureRecognizer(target: self,
+                                                action: #selector (self.handleTapOnCard(_:)))
+        recognizer.numberOfTapsRequired=1
+        recognizer.numberOfTouchesRequired=1
+        cardView.addGestureRecognizer(recognizer)
+    }
+    
     func putCardOnATable() {
         guard let card = game.draw() else {return}
-        field.add(card.view)
+        let cardView = card.view
+        addTapRecognizer(to: cardView)
+        field.add(cardView)
     }
     
     @IBOutlet weak var field: SetFieldView!
@@ -27,8 +55,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func removeLast(_ sender: Any) {
-        guard field.count>0 else { return }
-        field.remove(cardViewAt: field.count-1)
+        if !field.cardViews.isEmpty {
+            field.remove(cardViewAt: field.count-1)
+        }
     }
     
     @IBAction func shuffleCards(_ sender: Any) {
@@ -36,31 +65,37 @@ class ViewController: UIViewController {
     }
     
     @IBAction func hintCard(_ sender: Any) {
-        let card = field.cardViews[0]
-        
-        if card.status == .hinted {
-            card.status = .default
-        } else {
-            card.status = .hinted
+        if !field.cardViews.isEmpty {
+            let card = field.cardViews[0]
+            
+            if card.status == .hinted {
+                card.status = .default
+            } else {
+                card.status = .hinted
+            }
         }
     }
+    
     @IBAction func matchCard(_ sender: Any) {
-        let card = field.cardViews[0]
-        
-        if card.status == .matched {
-            card.status = .default
-        } else {
-            card.status = .matched
+        if !field.cardViews.isEmpty {
+            let card = field.cardViews[0]
+            
+            if card.status == .matched {
+                card.status = .default
+            } else {
+                card.status = .matched
+            }
         }
     }
     
     @IBAction func selectCard(_ sender: Any) {
-        let card = field.cardViews[0]
-        
-        if card.status == .selected {
-            card.status = .default
-        } else {
-            card.status = .selected
+        if !field.cardViews.isEmpty {
+            let card = field.cardViews[0]
+            if card.status == .selected {
+                card.status = .default
+            } else {
+                card.status = .selected
+            }
         }
     }
 }
